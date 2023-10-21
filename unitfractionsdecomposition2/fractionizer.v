@@ -8,22 +8,21 @@ pub fn three_digits_k(k f64) f64 {
     return (math.round(k * 1000) / 1000.0)
 }
 
-type ErrorImpact = int
+pub type ErrorImpact = int
 
-struct Tuple {
+pub struct Tuple {
 mut: 
     fst []f64
     snd f64 
 }
 
-struct TupleI {
+pub struct TupleI {
 mut: 
     fst []i64
     snd f64 
 }
 
-
-struct Tuple3 {
+pub struct Tuple3 {
 mut: 
     num int
     sol ?Tuple
@@ -270,4 +269,33 @@ pub fn less_err_simple_decomp_5pg(n ErrorImpact, ns []int, k f64) TupleI {
     ints << i64(math.round(next))
     return TupleI{ints, err5}
 }
+
+pub struct Tuple2I {
+mut:
+    fst i64
+    snd i64
+}
+
+pub struct TupleEgypt {
+mut:
+    fst []Tuple2I
+    err f64 
+}
+
+pub fn egyptian_fraction_decomposition(k f64) TupleEgypt {
+    upp := 2.0/3.0
+    if k <= 1.0 && k >= upp { tuple := less_err_simple_decomp_5pg(0, [], k - upp)
+                              ks := tuple.fst
+                              err := tuple.snd
+                              l := ks.len
+                              mut arr := []Tuple2I{len: l + 1, init: if index == 0 {Tuple2I{2,3}} else {Tuple2I{ 1, ks[index - 1] }}}
+                              return TupleEgypt{arr, err}}
+    else {   tuple := less_err_simple_decomp_5pg(0, [], k)
+             ks := tuple.fst
+             err := tuple.snd
+             l := ks.len
+             mut arr := []Tuple2I{len: l, init: Tuple2I{ 1, ks[index] }}
+             return TupleEgypt{arr, err}}
+}
+
 
